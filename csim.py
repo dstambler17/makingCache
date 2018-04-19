@@ -39,8 +39,8 @@ def getMemVals(mem, ind, off):
     x = x-1
     ind_val = mem_int & x
     tag = mem_int >> ind
-    print("tag is: " + str(tag))
-    print("ind_val is: " + str(ind_val))
+    #print("tag is: " + str(tag))
+    #print("ind_val is: " + str(ind_val))
     return ind_val, tag
 
 def readfile(filename, index, offset, myCache):
@@ -54,15 +54,13 @@ def readfile(filename, index, offset, myCache):
             #print(mem_address)
             if s1 == 'l':
                 myCache.load(tag, ind_val)
-                exit(0)
+                #exit(0)
             elif s1 == 's':
                 myCache.store(tag, ind_val)
-                exit(0)
+                #exit(0)
             else:
                 print ("Something is wrong.")
                 exit(0)
-    print("Number of stores: " + str(numS))
-    print("Number of loads: " + str(numL))
 
 def main():
     if len(sys.argv) != 8:
@@ -81,13 +79,21 @@ def main():
     #get index and offset
     index = int(math.log(num_sets,2))
     offset = int(math.log(num_bytes,2))
-    print(index)
-    print(offset)
+    #print(index)
+    #print(offset)
 
     simpleCache = Cache(num_sets, num_blocks, num_bytes, write_allocate_or_not, write_through_or_back, eviction)
 
     readfile(input_file, index, offset, simpleCache)
 
+    total_load, total_store, load_hits, load_miss, store_hits, store_miss, total_cycles = simpleCache.get_cycles()
+    print(total_load)
+    print(total_store)
+    print(load_hits)
+    print(load_miss)
+    print(store_hits)
+    print(store_miss)
+    print(total_cycles)
 
 if __name__ == "__main__":
     main()

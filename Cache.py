@@ -30,7 +30,7 @@ class Cache:
         #    for item in set:
         #        if item != None:
         #            if item.get_tag() == tag:
-        #                self.load_miss = 1
+        #                self.load_miss
         #                break
 
         #for set in cache_array:
@@ -43,6 +43,7 @@ class Cache:
     def store(self, tag, index):
         myBlock = Block(tag)
         print("hello")
+
 
     def get_cycles(self):
         total_load = self.load_hits + self.load_miss

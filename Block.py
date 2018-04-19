@@ -9,6 +9,9 @@ class Block:
     def set_dirty_bit_true(self):
         self.dirty_bit = 1
 
+    def reset_counter(self):
+        self.time_in_cell = 0
+
     def get_dirty_bit(self):
         return self.dirty_bit
 

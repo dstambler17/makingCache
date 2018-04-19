@@ -1,4 +1,5 @@
 import sys
+import math
 
 #Checks that command line args are valid
 def check_validity_of_args(set, block, byte, w_a, w_t, least_recent):
@@ -35,16 +36,15 @@ def readfile(filename, numS, numL):
         for line in f:
             input = (str(line)).split(" ")
             s1 = input[0]
-            print(s1)
+            #print(s1)
             mem_address = input[1]
-            print(mem_address)
-
+            #print(mem_address)
             if s1 == 'l':
                 numL = numL + 1
-                print ("This is a load.")
+                #print ("This is a load.")
             elif s1 == 's':
                 numS = numS + 1
-                print ("This is a store.")
+                #print ("This is a store.")
             else:
                 print ("Something is wrong.")
                 exit(0)
@@ -64,6 +64,12 @@ def main():
     input_file = sys.argv[7]
 
     check_validity_of_args(num_sets, num_blocks, num_bytes, write_allocate, write_through, least_recent)
+
+    #get index and offset
+    index = int(math.log(num_sets,2))
+    offset = int(math.log(num_bytes,2))
+    print(index)
+    print(offset)
 
     total_saves = 0
     total_loads = 0

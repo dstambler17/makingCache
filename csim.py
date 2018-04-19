@@ -1,5 +1,6 @@
 import sys
 import math
+from Cache import Cache
 
 #Checks that command line args are valid
 def check_validity_of_args(set, block, byte, w_a, w_t, least_recent):
@@ -40,23 +41,23 @@ def getMemVals(mem, ind, off):
     tag = mem_int >> ind
     print("tag is: " + str(tag))
     print("ind_val is: " + str(ind_val))
-    exit(0)
+    return ind_val, tag
 
-def readfile(filename, numS, numL, index, offset):
+def readfile(filename, index, offset, myCache):
     with open(filename) as f:
         for line in f:
             input = (str(line)).split(" ")
             s1 = input[0]
             #print(s1)
             mem_address = input[1]
-            getMemVals(mem_address, index, offset)
+            ind_val, tag = getMemVals(mem_address, index, offset)
             #print(mem_address)
             if s1 == 'l':
-                numL = numL + 1
-                #print ("This is a load.")
+                myCache.load(tag, ind_val)
+                exit(0)
             elif s1 == 's':
-                numS = numS + 1
-                #print ("This is a store.")
+                myCache.store(tag, ind_val)
+                exit(0)
             else:
                 print ("Something is wrong.")
                 exit(0)
@@ -70,12 +71,12 @@ def main():
     num_sets = int(sys.argv[1])
     num_blocks = int(sys.argv[2])
     num_bytes = int(sys.argv[3])
-    write_allocate = int(sys.argv[4])
-    write_through = int(sys.argv[5])
-    least_recent = int(sys.argv[6])
+    write_allocate_or_not = int(sys.argv[4])
+    write_through_or_back = int(sys.argv[5])
+    eviction = int(sys.argv[6])
     input_file = sys.argv[7]
 
-    check_validity_of_args(num_sets, num_blocks, num_bytes, write_allocate, write_through, least_recent)
+    check_validity_of_args(num_sets, num_blocks, num_bytes, write_allocate_or_not, write_through_or_back, eviction)
 
     #get index and offset
     index = int(math.log(num_sets,2))
@@ -83,9 +84,9 @@ def main():
     print(index)
     print(offset)
 
-    total_saves = 0
-    total_loads = 0
-    readfile(input_file, total_saves, total_loads, index, offset)
+    simpleCache = Cache(num_sets, num_blocks, num_bytes, write_allocate_or_not, write_through_or_back, eviction)
+
+    readfile(input_file, index, offset, simpleCache)
 
 
 if __name__ == "__main__":

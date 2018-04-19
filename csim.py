@@ -31,13 +31,25 @@ def check_validity_of_args(set, block, byte, w_a, w_t, least_recent):
         raise ValueError("Improper command line")
         exit(0)
 
-def readfile(filename, numS, numL):
+def getMemVals(mem, ind, off):
+    mem_int = int(mem, 0)
+    mem_int = mem_int >> off
+    x = 1 << (ind + 1)
+    x = x-1
+    ind_val = mem_int & x
+    tag = mem_int >> ind
+    print("tag is: " + str(tag))
+    print("ind_val is: " + str(ind_val))
+    exit(0)
+
+def readfile(filename, numS, numL, index, offset):
     with open(filename) as f:
         for line in f:
             input = (str(line)).split(" ")
             s1 = input[0]
             #print(s1)
             mem_address = input[1]
+            getMemVals(mem_address, index, offset)
             #print(mem_address)
             if s1 == 'l':
                 numL = numL + 1
@@ -73,7 +85,7 @@ def main():
 
     total_saves = 0
     total_loads = 0
-    readfile(input_file, total_saves, total_loads)
+    readfile(input_file, total_saves, total_loads, index, offset)
 
 
 if __name__ == "__main__":

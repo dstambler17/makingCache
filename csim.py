@@ -38,6 +38,7 @@ def readfile(filename, numS, numL):
             print(s1)
             mem_address = input[1]
             print(mem_address)
+
             if s1 == 'l':
                 numL = numL + 1
                 print ("This is a load.")
@@ -63,9 +64,10 @@ def main():
     input_file = sys.argv[7]
 
     check_validity_of_args(num_sets, num_blocks, num_bytes, write_allocate, write_through, least_recent)
-    num_saves = 0
-    num_loads = 0
-    readfile(input_file, num_saves, num_loads)
+
+    total_saves = 0
+    total_loads = 0
+    readfile(input_file, total_saves, total_loads)
 
 
 if __name__ == "__main__":

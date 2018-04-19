@@ -33,8 +33,8 @@ class Cache:
         #                self.load_miss = 1
         #                break
 
-        for set in cache_array:
-            for item in set:
+        #for set in cache_array:
+        #    for item in set:
 
 
         myBlock = Block(tag)

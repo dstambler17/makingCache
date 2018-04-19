@@ -22,7 +22,7 @@ def main():
     least_recent = sys.argv[6]
     input_file = sys.argv[7]
 
-    #check_validity_of_args(num_sets, num_blocks, num_bytes, write_allocate, write_through, least_recent)
+    check_validity_of_args(num_sets, num_blocks, num_bytes, write_allocate, write_through, least_recent)
 
 
 

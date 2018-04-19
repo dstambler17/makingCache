@@ -7,8 +7,8 @@ The average time was 0.04 seconds with a 95%.
 
     Now we use Optimization 1:
     	Performance is slightly higher a average time is now 0.037 seconds.
-	However, there are more 80%s here.
-	There is no notable change in number of misses or refs
+	    However, there are more 80%s here.
+	    There is no notable change in number of misses or refs
     Now we use Optimization 2
     	Performance is about the same as with optimization 0 (about 0.04 sec).
 	    However, there are more 80% than with other levels.
@@ -20,6 +20,8 @@ The average time was 0.04 seconds with a 95%.
       Performance is about 0.037 sec).
       Here there are more of 75% than previous optimizations.
 Now we swap i and j
+    Overall, for all optimizations, when i and j were swapped, the program ran much slower
+    and the miss rate was much higher.
 
     Using Optimization 0
       much slower
@@ -35,7 +37,7 @@ Now we swap i and j
       fast
       99.1% miss rate
     Using Optimization 4
-      same result as previous optimization
+      Performance and miss rate were the same as with using optimization 3.
 
 Reverting i and j back, we now experiment the SIZE parameter
 

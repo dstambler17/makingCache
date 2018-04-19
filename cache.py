@@ -25,9 +25,10 @@ class Cache:
     cache_array = [num_sets][num_blocks]
 
     def load(self, (tag, 0), index):
+        print("hi")
 
     def store(self, (tag, 0), index):
-
+        print("hi")
 
     def get_cycles(self):
         total_load = self.load_hits + self.load_miss

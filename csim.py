@@ -22,6 +22,9 @@ def check_validity_of_args(set, block, byte, w_a, w_t, least_recent):
     if least_recent != 0 and least_recent != 1:
         raise ValueError("Improper command line")
         exit(0)
+    if w_a == 0 and w_t == 0:
+        raise ValueError("Improper command line")
+        exit(0)
     if byte < 0 or set_result != 0:
         raise ValueError("Improper command line")
         exit(0)

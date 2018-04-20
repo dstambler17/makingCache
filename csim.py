@@ -38,8 +38,9 @@ def check_validity_of_args(set, block, byte, w_a, w_t, least_recent):
 def getMemVals(mem, ind, off):
     mem_int = int(mem, 0)
     mem_int = mem_int >> off
-    x = 1 << (ind + 1)
-    x = x-1
+    x=0
+    x = 1 << (ind)
+    x -= 1
     ind_val = mem_int & x
     tag = mem_int >> ind
     #print("tag is: " + str(tag))
@@ -86,7 +87,9 @@ def main():
     #print(offset)
 
     simpleCache = Cache(num_sets, num_blocks, num_bytes, write_allocate_or_not, write_through_or_back, eviction)
-
+    arr = simpleCache.get_cache_array()
+    #print(arr)
+    #exit(0)
     readfile(input_file, index, offset, simpleCache)
 
     total_load, total_store, load_hits, load_miss, store_hits, store_miss, total_cycles = simpleCache.get_cycles()

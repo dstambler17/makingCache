@@ -28,7 +28,7 @@ class Cache:
     def find_fifo(self):
         b2 = self.cache_array[index][1].get_fifo()
         x = 0
-        for i in range(num_blocks):
+        for i in range(self.num_blocks):
             if b2 < self.cache_array[index][i].get_fifo():
                 b2 = self.cache_array[index][i].get_fifo()
                 x = i
@@ -38,7 +38,7 @@ class Cache:
     def find_lru(self):
         b2 = self.cache_array[index][1].get_lru()
         x = 0
-        for i in range(num_blocks):
+        for i in range(self.num_blocks):
             if b2 < self.cache_array[index][i].get_lru():
                 b2 = self.cache_array[index][i].get_lru()
                 x = i
@@ -47,23 +47,23 @@ class Cache:
 
     def load(self, tag, index):
         b1 = Block(tag)
-        for i in range(num_blocks):
-            if(cache_array[index][i].get_tag() == tag):
-                load_hits = load_hits + 1
-                cache_array[index][i].reset_lru()
+        for i in range(self.num_blocks):
+            if(self.cache_array[index][i].get_tag() == tag):
+                self.load_hits += 1
+                self.cache_array[index][i].reset_lru()
                 return
-        for i in range(num_blocks):
-            if(cache_array[index][i] == None):
-                cache_array[index][i] = b1
-                load_miss = load_miss + 1
+        for i in range(self.num_blocks):
+            if(self.cache_array[index][i] == None):
+                self.cache_array[index][i] = b1
+                self.load_miss += 1
                 return
         x = 0
-        if eviction==0:
+        if self.eviction == 0:
             x = find_fifo()
-        elif eviction==1:
+        elif self.eviction == 1:
             x = find_lru()
-        cache_array[index][x] == b1
-        load_miss = load_miss + 1
+        self.cache_array[index][x] == b1
+        load_miss += 1
         return
 
 

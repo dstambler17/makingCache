@@ -25,7 +25,7 @@ class Cache:
 
     cache_array = [[None for _ in range(num_blocks)] for _ in range(num_sets)]
 
-    def find_fifo(self):
+    def find_fifo(index):
         b2 = self.cache_array[index][1].get_fifo()
         x = 0
         for i in range(self.num_blocks):
@@ -35,7 +35,7 @@ class Cache:
         return x
 
 
-    def find_lru(self):
+    def find_lru(index):
         b2 = self.cache_array[index][1].get_lru()
         x = 0
         for i in range(self.num_blocks):
@@ -59,9 +59,9 @@ class Cache:
                 return
         x = 0
         if self.eviction == 0:
-            x = find_fifo()
+            x = find_fifo(index)
         elif self.eviction == 1:
-            x = find_lru()
+            x = find_lru(index)
         self.cache_array[index][x] == b1
         self.load_miss += 1
         return

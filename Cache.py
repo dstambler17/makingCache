@@ -57,16 +57,14 @@ class Cache:
                 cache_array[index][i] = b1
                 load_miss = load_miss + 1
                 return
+        x = 0
         if eviction==0:
             x = find_fifo()
-            cache_array[index][x] == b1
-            load_miss = load_miss + 1
-            return
         elif eviction==1:
             x = find_lru()
-            cache_array[index][x] == b1
-            load_miss = load_miss + 1
-            return
+        cache_array[index][x] == b1
+        load_miss = load_miss + 1
+        return
 
 
         #for set in cache_array:

@@ -23,7 +23,7 @@ class Cache:
         self.write_allocate_or_not = write_allocate_or_not
         self.write_through_or_back = write_through_or_back
         self.eviction = eviction
-        self.cache_array = [[None for x in range(num_sets)] for y in range(num_blocks)]
+        self.cache_array = [[None for x in range(num_blocks)] for y in range(num_sets)]
 
     #def create_array(set, blocks):
         #bNull = Block(-1)
@@ -44,7 +44,7 @@ class Cache:
     def get_cache_array(self):
         return self.cache_array
 
-    def find_fifo(index):
+    def find_fifo(self, index):
         b2 = self.cache_array[index][1].get_fifo()
         x = 0
         for i in range(self.num_blocks):
@@ -54,28 +54,30 @@ class Cache:
         return x 
 
 
-    def find_lru(index):
-        b2 = self.cache_array[index][1].get_lru()
+    def find_lru(self, index):
+        b2 = 0
         x = 0
         for i in range(self.num_blocks):
-            if b2 < self.cache_array[index][i].get_lru():
-                b2 = self.cache_array[index][i].get_lru()
-                x = i
+            if(self.cache_array[index][i] != None):
+                if b2 < self.cache_array[index][i].get_lru():
+                    b2 = self.cache_array[index][i].get_lru()
+                    x = i
         return x
 
     #Increment if miss
-    def store_miss(tag, index):
+    def store_is_miss(self, tag, index):
         b = Block(tag)
+        pos = 0
 
         #If you modify cache
         if self.write_allocate_or_not == 1:
             full_set = 1
-            for item in self.cache_array[index]:
-                if item ==None:
-                    item = b
-                    pos = self.cache_array.index(item)
+            for i in range(self.num_blocks):
+                if(self.cache_array[index][i] == None):
+                    self.cache_array[index][i] = b
                     self.store_miss = self.store_miss + 1
                     full_set = 0
+                    pos = i
                     break
 
             if full_set == 1: #if full,
@@ -83,7 +85,7 @@ class Cache:
                     x = find_fifo(index)
                     self.cache_array[index][x] = b
                 elif self.eviction == 1:
-                    x = find_lru(index)
+                    x = self.find_lru(index)
                     self.cache_array[index][x] = b
 
                 if self.cache_array[index][x].get_dirty_bit() == 1:
@@ -101,7 +103,7 @@ class Cache:
 
 
     #Increment if store is a hit
-    def store_hit(index, pos):
+    def store_is_hit(self, index, pos):
         self.store_hits = self.store_hits + 1
 
         if self.write_through_or_back == 0:
@@ -110,7 +112,7 @@ class Cache:
 
 
     #Increment counter
-    def increment_counters(tag, index):
+    def increment_counters(self, tag, index):
         for item in self.cache_array[index]:
             if item !=None:
                 item.increment_lru()
@@ -124,26 +126,27 @@ class Cache:
             #if item !=None:
                 if(self.cache_array[index][i].get_tag() == tag):
                     hit = 1
-                    pos = self.cache_array.index(item)
-                    item.reset_lru()
+                    pos = i
+                    self.cache_array[index][i].reset_lru()
                     break
 
         if hit == 1:
-            store_hit(index, pos)
+            self.store_is_hit(index, pos)
         else:
-            store_miss(tag, index)
+            self.store_is_miss(tag, index)
 
         #increment counters
-        increment_counters(tag, index)
+        self.increment_counters(tag, index)
 
 
     def load(self, tag, index):
         b1 = Block(tag)
         for i in range(self.num_blocks):
-            if(self.cache_array[index][i].get_tag() == tag):
-                self.load_hits += 1
-                self.cache_array[index][i].reset_lru()
-                return
+            if(self.cache_array[index][i] != None):
+                if(self.cache_array[index][i].get_tag() == tag):
+                    self.load_hits += 1
+                    self.cache_array[index][i].reset_lru()
+                    return
         for i in range(self.num_blocks):
             if(self.cache_array[index][i] == None):
                 self.cache_array[index][i] = b1
@@ -151,9 +154,9 @@ class Cache:
                 return
         x = 0
         if self.eviction == 0:
-            x = find_fifo(index)
+            x = self.find_fifo(index)
         elif self.eviction == 1:
-            x = find_lru(index)
+            x = self.find_lru(index)
 
         if self.cache_array[index][x].get_dirty_bit() == 1:
             self.load_miss += 1

@@ -16,6 +16,19 @@ def rfile(filename):
     print("Number of stores: " + str(numS))
     print("Number of loads: " + str(numL))
 
+
+def bitManip(mem, ind, off):
+    mem_int = int(mem, 0)
+    mem_int = mem_int >> off
+    x = 1 << (ind + 1)
+    x = x-1
+    ind_val = mem_int & x
+    tag = mem_int >> ind
+    print("tag is: " + str(tag))
+    print("ind_val is: " + str(ind_val))
+
+
+
 def main():
     filename = "gcc.trace"
     rfile(filename)

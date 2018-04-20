@@ -26,6 +26,20 @@ class Cache:
     cache_array = [[None for _ in range(num_blocks)] for _ in range(num_sets)]
 
     def load(self, tag, index):
+        b1 = Block(tag)
+        for i in range(columns):
+            if(cache_array[index][i].get_tag() == tag):
+                load_hits = load_hits + 1
+                return
+        for i in range(columns):
+            if(cache_array[index][i] == None):
+                cache_array[index][i] = b1
+                load_miss = load_miss + 1
+                return
+            elif :
+
+
+
         #for set in cache_array:
         #    for item in set:
         #        if item != None:

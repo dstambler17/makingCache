@@ -26,25 +26,70 @@ class FakeCache:
     cache_array = [[None for _ in range(num_blocks)] for _ in range(num_sets)]
 
     def load(self, tag, index):
-        #for set in cache_array:
-        #    for item in set:
-        #        if item != None:
-        #            if item.get_tag() == tag:
-        #                self.load_miss
-        #                break
-
-        #for set in cache_array:
-        #    for item in set:
-
-
         myBlock = Block(tag)
         print("hi")
 
-    def store_miss(tag, index):
 
+
+    #Finds LRU
+    def find_lru(index):
+        b2 = cache_array[index][1]
+        x = 0
+        for i in range(self.num_blocks):
+                if b2.get_lru() < self.cache_array[index][i].get_lru():
+                    b2 = self.cache_array[index][i]
+                    x = i
+        return x
+
+    #Finds FiFo
+    def find_fifo(index):
+        b2 = cache_array[index][1]
+        x = 0
+        for i in range(self.num_blocks):
+            if b2.get_fifo() < self.cache_array[index][i].get_fifo():
+                b2 = self.cache_array[index][i]
+                x = i
+        return x
+
+    #Increment if miss
+    def store_miss(tag, index):
+        b = Block(tag)
+
+        #If you modify cache
+        if self.write_allocate_or_not == 1:
+            full_set = 1
+            for item in self.cache_array[index]:
+                if item ==None:
+                    item = b
+                    pos = self.cache_array.index(item)
+                    self.store_miss = self.store_miss + 1
+                    full_set = 0
+                    break
+
+            if full_set == 1: #if full,
+                if self.eviction == 0:
+                    x = find_fifo(index)
+                    self.cache_array[index][x] = b
+                elif self.eviction == 1:
+                    x = find_lru(index)
+                    self.cache_array[index][x] = b
+
+        #if you mod memory
+        if self.write_through_or_back == 1:
+            self.store_miss = self.store_miss + 100 #write to memory
+
+        #if you do dirty bit
+        elif self.write_through_or_back == 0:
+            item = self.cache_array[index][pos]
+            item.set_dirty_bit_true()
+
+
+
+    #Increment if store is a hit
     def store_hit(tag, index):
         self.store_hits = self.store_hits + 1
 
+    #Increment counter
     def increment_counters(tag, index):
         for item in self.cache_array[index]:
             if item !=None:
@@ -65,11 +110,8 @@ class FakeCache:
         else:
             store_miss(tag, index)
 
-        myBlock = Block(tag)
         #increment counters
         increment_counters(tag, index)
-
-        print("hello")
 
 
     def get_cycles(self):

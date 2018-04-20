@@ -25,19 +25,48 @@ class Cache:
 
     cache_array = [[None for _ in range(num_blocks)] for _ in range(num_sets)]
 
+    def find_fifo(self):
+        b2 = cache_array[index][1]
+        x = 0
+        for i in range(columns):
+            if b2.get_fifo() < cache_array[index][i].get_fifo():
+                b2 = cache_array[index][i]
+                x = i
+        return x
+
+
+    def find_lru(self):
+        b2 = cache_array[index][1]
+        x = 0
+        for i in range(columns):
+            if b2.get_lru() < cache_array[index][i].get_lru():
+                b2 = cache_array[index][i]
+                x = i
+        return x
+
+
     def load(self, tag, index):
         b1 = Block(tag)
         for i in range(columns):
             if(cache_array[index][i].get_tag() == tag):
                 load_hits = load_hits + 1
+                cache_array[index][i].reset_lru()
                 return
         for i in range(columns):
             if(cache_array[index][i] == None):
                 cache_array[index][i] = b1
                 load_miss = load_miss + 1
                 return
-            elif :
-
+        if eviction==0:
+            x = find_fifo()
+            cache_array[index][x] == b1
+            load_miss = load_miss + 1
+            return
+        elif eviction==1:
+            x = find_lru()
+            cache_array[index][x] == b1
+            load_miss = load_miss + 1
+            return
 
 
         #for set in cache_array:

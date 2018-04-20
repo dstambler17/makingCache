@@ -3,18 +3,22 @@ dstambl2@jhu.edu ksherma6@jhu.edu
 
 HW6 Part 1 Observations and Answers
 When we run the matrix file with 0 optimization and with all default parameters, we get 167,916,067 I refs and 787 misses, and 83,941,235 D refs and 1,050,434 D1 misses. We also get 1,051,221 LL refs, and 1,051,255 LLd misses.
-The average time was 0.04 seconds with a 90%.
+The average time was 0.04 seconds with a 95%.
 
     Now we use Optimization 1:
     	Performance is slightly higher a average time is now 0.037 seconds.
 	However, there are more 80%s here.
-	There is no notable change in number of misses or refs 
+	There is no notable change in number of misses or refs
     Now we use Optimization 2
     	Performance is about the same as with optimization 0 (about 0.04 sec).
-	However, there are more 100% than with other levels.
-	The number of misses and refs is still unchanged.
+	    However, there are more 80% than with other levels.
+	    The number of misses and refs is still unchanged.
     Now we use Optimization 3
+      Performance is about the same as with optimization 0 (about 0.04 sec).
+      Here there are about an equal number of 75% as 80% in the prev optimization.
     Now we use Optimization 4
+      Performance is about 0.037 sec).
+      Here there are more of 75% than previous optimizations.
 Now we swap i and j
 
     Using Optimization 0

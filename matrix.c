@@ -32,7 +32,7 @@ int main(void)
 
 	for (i = 0; i < SIZE; i++) {
 		for (j = 0; j < SIZE; j++) {
-			matrix[i][j] = 107;
+			matrix[j][i] = 107;
 		}
 	}
 

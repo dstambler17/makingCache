@@ -67,6 +67,9 @@ class Cache:
                     x = find_lru(index)
                     self.cache_array[index][x] = b
 
+                if self.cache_array[index][x].get_dirty_bit() == 1:
+                    self.load_miss = self.load_miss + 1
+
         #if you mod memory
         if self.write_through_or_back == 1:
             self.store_miss = self.store_miss + 100 #write to memory
@@ -76,9 +79,16 @@ class Cache:
             item = self.cache_array[index][pos]
             item.set_dirty_bit_true()
 
+
+
     #Increment if store is a hit
-    def store_hit(tag, index):
+    def store_hit(index, pos):
         self.store_hits = self.store_hits + 1
+
+        if self.write_through_or_back == 0:
+            item = self.cache_array[index][pos]
+            item.set_dirty_bit_true()
+
 
     #Increment counter
     def increment_counters(tag, index):
@@ -94,11 +104,12 @@ class Cache:
             if item !=None:
                 if item.get_tag() == tag:
                     hit = 1
+                    pos = self.cache_array.index(item)
                     item.reset_lru()
                     break
 
         if hit == 1:
-            store_hit(tag, index)
+            store_hit(index, pos)
         else:
             store_miss(tag, index)
 
@@ -123,12 +134,12 @@ class Cache:
             x = find_fifo(index)
         elif self.eviction == 1:
             x = find_lru(index)
-        if self.cache_array[index][x].get_dirty_bit():
+
+        if self.cache_array[index][x].get_dirty_bit() == 1:
             self.load_miss += 1
         self.cache_array[index][x] = b1
         self.load_miss += 1
         return
-
 
 
     def get_cycles(self):

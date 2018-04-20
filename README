@@ -22,10 +22,20 @@ The average time was 0.04 seconds with a 95%.
 Now we swap i and j
 
     Using Optimization 0
+      much slower
+      time percentage much higher - always close to 100%
+      20% miss rate
     Using Optimization 1
-    Using Optimization 2
+      99% d1 miss rate
+      time percentages close to 100%
+      slow
+    Using Optimization
+      same result as above
     Using Optimization 3
+      fast
+      99.1% miss rate
     Using Optimization 4
+      same result as previous optimization
 
 Reverting i and j back, we now experiment the SIZE parameter
 

@@ -22,7 +22,7 @@
 
 #include <stdlib.h>
 
-#define SIZE 4096
+#define SIZE 4095
 
 int matrix[SIZE][SIZE];
 
@@ -32,7 +32,7 @@ int main(void)
 
 	for (i = 0; i < SIZE; i++) {
 		for (j = 0; j < SIZE; j++) {
-			matrix[j][i] = 107;
+			matrix[i][j] = 107;
 		}
 	}
 

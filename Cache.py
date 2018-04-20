@@ -63,7 +63,7 @@ class Cache:
         elif self.eviction == 1:
             x = find_lru()
         self.cache_array[index][x] == b1
-        load_miss += 1
+        self.load_miss += 1
         return
 
 

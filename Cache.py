@@ -123,7 +123,9 @@ class Cache:
             x = find_fifo(index)
         elif self.eviction == 1:
             x = find_lru(index)
-        self.cache_array[index][x] == b1
+        if self.cache_array[index][x].get_dirty_bit():
+            self.load_miss += 1
+        self.cache_array[index][x] = b1
         self.load_miss += 1
         return
 

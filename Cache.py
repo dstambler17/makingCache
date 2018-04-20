@@ -32,7 +32,7 @@ class Cache:
             if b2 < self.cache_array[index][i].get_fifo():
                 b2 = self.cache_array[index][i].get_fifo()
                 x = i
-        return x
+        return x 
 
 
     def find_lru(index):

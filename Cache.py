@@ -26,33 +26,33 @@ class Cache:
     cache_array = [[None for _ in range(num_blocks)] for _ in range(num_sets)]
 
     def find_fifo(self):
-        b2 = cache_array[index][1]
+        b2 = self.cache_array[index][1].get_fifo()
         x = 0
-        for i in range(columns):
-            if b2.get_fifo() < cache_array[index][i].get_fifo():
-                b2 = cache_array[index][i]
+        for i in range(num_blocks):
+            if b2 < self.cache_array[index][i].get_fifo():
+                b2 = self.cache_array[index][i].get_fifo()
                 x = i
         return x
 
 
     def find_lru(self):
-        b2 = cache_array[index][1]
+        b2 = self.cache_array[index][1].get_lru()
         x = 0
-        for i in range(columns):
-            if b2.get_lru() < cache_array[index][i].get_lru():
-                b2 = cache_array[index][i]
+        for i in range(num_blocks):
+            if b2 < self.cache_array[index][i].get_lru():
+                b2 = self.cache_array[index][i].get_lru()
                 x = i
         return x
 
 
     def load(self, tag, index):
         b1 = Block(tag)
-        for i in range(columns):
+        for i in range(num_blocks):
             if(cache_array[index][i].get_tag() == tag):
                 load_hits = load_hits + 1
                 cache_array[index][i].reset_lru()
                 return
-        for i in range(columns):
+        for i in range(num_blocks):
             if(cache_array[index][i] == None):
                 cache_array[index][i] = b1
                 load_miss = load_miss + 1

@@ -44,6 +44,67 @@ class Cache:
                 x = i
         return x
 
+    #Increment if miss
+    def store_miss(tag, index):
+        b = Block(tag)
+
+        #If you modify cache
+        if self.write_allocate_or_not == 1:
+            full_set = 1
+            for item in self.cache_array[index]:
+                if item ==None:
+                    item = b
+                    pos = self.cache_array.index(item)
+                    self.store_miss = self.store_miss + 1
+                    full_set = 0
+                    break
+
+            if full_set == 1: #if full,
+                if self.eviction == 0:
+                    x = find_fifo(index)
+                    self.cache_array[index][x] = b
+                elif self.eviction == 1:
+                    x = find_lru(index)
+                    self.cache_array[index][x] = b
+
+        #if you mod memory
+        if self.write_through_or_back == 1:
+            self.store_miss = self.store_miss + 100 #write to memory
+
+        #if you do dirty bit
+        elif self.write_through_or_back == 0:
+            item = self.cache_array[index][pos]
+            item.set_dirty_bit_true()
+
+    #Increment if store is a hit
+    def store_hit(tag, index):
+        self.store_hits = self.store_hits + 1
+
+    #Increment counter
+    def increment_counters(tag, index):
+        for item in self.cache_array[index]:
+            if item !=None:
+                item.increment_lru()
+                item.increment_fifo()
+
+
+    def store(self, tag, index):
+        hit = 0
+        for item in self.cache_array[index]:
+            if item !=None:
+                if item.get_tag() == tag:
+                    hit = 1
+                    item.reset_lru()
+                    break
+
+        if hit == 1:
+            store_hit(tag, index)
+        else:
+            store_miss(tag, index)
+
+        #increment counters
+        increment_counters(tag, index)
+
 
     def load(self, tag, index):
         b1 = Block(tag)
@@ -66,24 +127,6 @@ class Cache:
         self.load_miss += 1
         return
 
-
-        #for set in cache_array:
-        #    for item in set:
-        #        if item != None:
-        #            if item.get_tag() == tag:
-        #                self.load_miss
-        #                break
-
-        #for set in cache_array:
-        #    for item in set:
-
-
-        myBlock = Block(tag)
-        print("hi")
-
-    def store(self, tag, index):
-        myBlock = Block(tag)
-        print("hello")
 
 
     def get_cycles(self):

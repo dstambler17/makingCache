@@ -7,6 +7,7 @@ class Cache:
     write_allocate_or_not = 0
     write_through_or_back = 0
     eviction = 0
+    cache_array = []
 
     #cycles to keep track
     load_hits = 0
@@ -22,8 +23,26 @@ class Cache:
         self.write_allocate_or_not = write_allocate_or_not
         self.write_through_or_back = write_through_or_back
         self.eviction = eviction
+        self.cache_array = [[None for x in range(num_sets)] for y in range(num_blocks)]
 
-    cache_array = [[None for _ in range(num_blocks)] for _ in range(num_sets)]
+    #def create_array(set, blocks):
+        #bNull = Block(-1)
+        #array = [[bNull for x in range(set)] for y in range(blocks)]
+
+        #array = []
+        #for i in range(set):
+        #    block = []
+        #    for j in range(blocks):
+        #        block.append(bNull)
+        #    array.append(block)
+        #return array
+
+
+    #cache_array = create_array(num_sets, num_blocks)
+    #cache_array = [[0 for x in range(self.num_sets)] for y in range(self.num_blocks)]
+
+    def get_cache_array(self):
+        return self.cache_array
 
     def find_fifo(index):
         b2 = self.cache_array[index][1].get_fifo()
@@ -100,9 +119,10 @@ class Cache:
 
     def store(self, tag, index):
         hit = 0
-        for item in self.cache_array[index]:
-            if item !=None:
-                if item.get_tag() == tag:
+        for i in range(self.num_blocks):
+            if(self.cache_array[index][i] != None):
+            #if item !=None:
+                if(self.cache_array[index][i].get_tag() == tag):
                     hit = 1
                     pos = self.cache_array.index(item)
                     item.reset_lru()

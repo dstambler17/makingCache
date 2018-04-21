@@ -14,6 +14,7 @@ class Cache:
     load_miss = 0
     store_hits = 0
     store_miss = 0
+    total_cycles = 0
 
 
     def __init__(self, num_sets, num_blocks, num_bytes, write_allocate_or_not, write_through_or_back, eviction):
@@ -25,21 +26,6 @@ class Cache:
         self.eviction = eviction
         self.cache_array = [[None for x in range(num_blocks)] for y in range(num_sets)]
 
-    #def create_array(set, blocks):
-        #bNull = Block(-1)
-        #array = [[bNull for x in range(set)] for y in range(blocks)]
-
-        #array = []
-        #for i in range(set):
-        #    block = []
-        #    for j in range(blocks):
-        #        block.append(bNull)
-        #    array.append(block)
-        #return array
-
-
-    #cache_array = create_array(num_sets, num_blocks)
-    #cache_array = [[0 for x in range(self.num_sets)] for y in range(self.num_blocks)]
 
     def get_cache_array(self):
         return self.cache_array
@@ -75,40 +61,52 @@ class Cache:
             for i in range(self.num_blocks):
                 if(self.cache_array[index][i] == None):
                     self.cache_array[index][i] = b
-                    self.store_miss = self.store_miss + 1
                     full_set = 0
                     pos = i
                     break
 
             if full_set == 1: #if full,
+                self.total_cycles = self.total_cycles + (100 * (self.num_bytes/4))
                 if self.eviction == 0:
                     x = find_fifo(index)
                     self.cache_array[index][x] = b
+                    if self.write_through_or_back == 0:
+                        self.store_miss = self.store_miss + 1
+                        self.total_cycles = self.total_cycles + 1 + (200 * (self.num_bytes/4))
+
                 elif self.eviction == 1:
                     x = self.find_lru(index)
                     self.cache_array[index][x] = b
 
-                if self.cache_array[index][x].get_dirty_bit() == 1:
-                    self.load_miss = self.load_miss + 1
+
+                #if self.cache_array[index][x].get_dirty_bit() == 1:
+                    #self.load_miss = self.load_miss + 1
+                    #self.total_cycles = self.total_cycles + (100 * (self.num_bytes/4))
+
 
         #if you mod memory
-        if self.write_through_or_back == 1:
-            self.store_miss = self.store_miss + 100 #write to memory
-
+        #if self.write_through_or_back == 1:
         #if you do dirty bit
-        elif self.write_through_or_back == 0:
+        if self.write_through_or_back == 0:
             item = self.cache_array[index][pos]
             item.set_dirty_bit_true()
+
 
 
 
     #Increment if store is a hit
     def store_is_hit(self, index, pos):
-        self.store_hits = self.store_hits + 1
 
-        if self.write_through_or_back == 0:
+        if self.write_through_or_back == 0 and self.write_allocate_or_not == 1:
             item = self.cache_array[index][pos]
             item.set_dirty_bit_true()
+            self.total_cycles = self.total_cycles + 1
+        #elif self.write_through_or_back == 1 and self.write_allocate_or_not == 1:
+            #self.total_cycles = self.total_cycles + 1 + 100
+        #elif self.write_through_or_back == 1 and self.write_allocate_or_not == 0:
+            #self.total_cycles = self.total_cycles + 1 + 100
+        else:
+            self.total_cycles = self.total_cycles + 1 + 100
 
 
     #Increment counter
@@ -131,8 +129,19 @@ class Cache:
                     break
 
         if hit == 1:
+            self.store_hits = self.store_hits + 1
             self.store_is_hit(index, pos)
         else:
+            self.store_miss = self.store_miss + 1
+            if self.write_through_or_back == 1 and self.write_allocate_or_not == 1:
+                self.total_cycles = self.total_cycles + 1 + (100 * (self.num_bytes/4))
+
+            elif self.write_through_or_back == 0 and self.write_allocate_or_not == 1:
+                self.total_cycles = self.total_cycles + 1 + (100 * (self.num_bytes/4))
+
+            elif self.write_through_or_back == 1 and self.write_allocate_or_not == 0:
+                self.total_cycles = self.total_cycles + 100
+
             self.store_is_miss(tag, index)
 
         #increment counters
@@ -147,6 +156,8 @@ class Cache:
                     self.load_hits += 1
                     self.cache_array[index][i].reset_lru()
                     return
+        #Miss
+        self.total_cycles = self.total_cycles + 1 + (100 * (self.num_bytes/4))
         for i in range(self.num_blocks):
             if(self.cache_array[index][i] == None):
                 self.cache_array[index][i] = b1
@@ -158,8 +169,8 @@ class Cache:
         elif self.eviction == 1:
             x = self.find_lru(index)
 
-        if self.cache_array[index][x].get_dirty_bit() == 1:
-            self.load_miss += 1
+        #if self.cache_array[index][x].get_dirty_bit() == 1:
+            #self.load_miss += 1
         self.cache_array[index][x] = b1
         self.load_miss += 1
         return
@@ -168,5 +179,5 @@ class Cache:
     def get_cycles(self):
         total_load = self.load_hits + self.load_miss
         total_store = self.store_hits + self.store_miss
-        total_cycles = total_load + total_store
-        return total_load, total_store, self.load_hits, self.load_miss, self.store_hits, self.store_miss, total_cycles
+        #total_cycles = total_load + total_store
+        return total_load, total_store, self.load_hits, self.load_miss, self.store_hits, self.store_miss, self.total_cycles

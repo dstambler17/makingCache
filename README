@@ -6,13 +6,13 @@ When we run the matrix file with 0 optimization and with all default parameters,
 The average time was 0.04 seconds with a 95%.
 
     Now we use Optimization 1:
-    	Performance is slightly higher a average time is now 0.037 seconds.
-	    However, there are more 80%s here.
-	    There is no notable change in number of misses or refs
+    Performance is slightly higher a average time is now 0.037 seconds.
+      However, there are more 80%s here.
+      There is no notable change in number of misses or refs
     Now we use Optimization 2
-    	Performance is about the same as with optimization 0 (about 0.04 sec).
-	    However, there are more 80% than with other levels.
-	    The number of misses and refs is still unchanged.
+      Performance is about the same as with optimization 0 (about 0.04 sec).
+      However, there are more 80% than with other levels.
+      The number of misses and refs is still unchanged.
     Now we use Optimization 3
       Performance is about the same as with optimization 0 (about 0.04 sec).
       Here there are about an equal number of 75% as 80% in the prev optimization.
@@ -40,15 +40,26 @@ Now we swap i and j
       Performance and miss rate were the same as with using optimization 3.
 
 Reverting i and j back, we now experiment the SIZE parameter
-We noticed that there is almost no change in performance with smaller size parameters. This is because large caches work much slower
+We noticed that there is almost no change in performance with smaller size parameters.
+For example, when we change SIZE to 1024, the speed improves slightly. However, changing to 4096 see a notable change in performance. This is because large caches work much slower
 
 Conclusions
-Overall, we conclude that Op
+Overall, we conclude that Optimizing when i and j are in the right order will not have as
+much an effect as when you optimize when i and j were swapped.
+When you swap i and j, you violate the locality rule of the cache and thus, accessing different parts of the cache becomes much smaller, leaving more room for optimization.
+When we experiment with the size parameter, we also find that optimizing helps for the caches with the larger paramters.
 
+-------------------------------------------------------------------------------------------
 HW6 Part 2
-We created a Cache object and a Block Object for this program
 To run the program (which is in python) type
 python3 csim.py (followed by command line arguments)
 
 For example:
 python3 csim.py 256 4 16 1 0 1 gcc.trace
+
+Brief Explination
+We created a Cache object and a Block Object for this program
+Most of our program was handled in the cache object class file.
+Each block object was made up of a bit that could be dirty, a tag, a counter
+for FIFO, and a counter for least recently used.
+

@@ -40,6 +40,15 @@ Now we swap i and j
       Performance and miss rate were the same as with using optimization 3.
 
 Reverting i and j back, we now experiment the SIZE parameter
-
+We noticed that there is almost no change in performance with smaller size parameters. This is because large caches work much slower
 
 Conclusions
+Overall, we conclude that Op
+
+HW6 Part 2
+We created a Cache object and a Block Object for this program
+To run the program (which is in python) type
+python3 csim.py (followed by command line arguments)
+
+For example:
+python3 csim.py 256 4 16 1 0 1 gcc.trace

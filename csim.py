@@ -1,3 +1,8 @@
+#Kevin Sherman
+#Daniel Stambler
+#ksherma6@jhu.edu
+#dstambl2@jhu.edu
+
 import sys
 import math
 from Cache import Cache
@@ -37,7 +42,7 @@ def check_validity_of_args(set, block, byte, w_a, w_t, least_recent, input_file)
     file_check = input_file.split(".")
     if file_check[1] != "trace":
         raise ValueError("Improper command line arg")
-        exit(0) 
+        exit(0)
 
 def getMemVals(mem, ind, off):
     mem_int = int(mem, 0)
@@ -47,8 +52,6 @@ def getMemVals(mem, ind, off):
     x -= 1
     ind_val = mem_int & x
     tag = mem_int >> ind
-    #print("tag is: " + str(tag))
-    #print("ind_val is: " + str(ind_val))
     return ind_val, tag
 
 def readfile(filename, index, offset, myCache):
@@ -56,16 +59,12 @@ def readfile(filename, index, offset, myCache):
         for line in f:
             input = (str(line)).split(" ")
             s1 = input[0]
-            #print(s1)
             mem_address = input[1]
             ind_val, tag = getMemVals(mem_address, index, offset)
-            #print(mem_address)
             if s1 == 'l':
                 myCache.load(tag, ind_val)
-                #exit(0)
             elif s1 == 's':
                 myCache.store(tag, ind_val)
-                #exit(0)
             else:
                 raise ValueError("Load and Save must be l or s")
                 exit(0)
@@ -87,23 +86,19 @@ def main():
     #get index and offset
     index = int(math.log(num_sets,2))
     offset = int(math.log(num_bytes,2))
-    #print(index)
-    #print(offset)
 
     simpleCache = Cache(num_sets, num_blocks, num_bytes, write_allocate_or_not, write_through_or_back, eviction)
     arr = simpleCache.get_cache_array()
-    #print(arr)
-    #exit(0)
     readfile(input_file, index, offset, simpleCache)
 
     total_load, total_store, load_hits, load_miss, store_hits, store_miss, total_cycles = simpleCache.get_cycles()
-    print(total_load)
-    print(total_store)
-    print(load_hits)
-    print(load_miss)
-    print(store_hits)
-    print(store_miss)
-    print(total_cycles)
+    print("Total loads: " + str(total_load))
+    print("Total stores: " + str(total_store))
+    print("Load hits: " + str(load_hits))
+    print("Load misses: " + str(load_miss))
+    print("Store hits: " + str(store_hits))
+    print("Store misses: " + str(store_miss))
+    print("Total cycles: " + str(int(total_cycles)))
 
 if __name__ == "__main__":
     main()

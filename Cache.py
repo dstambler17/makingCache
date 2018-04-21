@@ -1,3 +1,8 @@
+#Daniel Stambler
+#Kevin Sherman
+#dstambl2@jhu.edu
+#ksherma6@jhu.edu
+
 from Block import Block
 class Cache:
 
@@ -79,9 +84,9 @@ class Cache:
                     self.cache_array[index][x] = b
 
 
-                #if self.cache_array[index][x].get_dirty_bit() == 1:
+                if self.cache_array[index][x].get_dirty_bit() == 1:
                     #self.load_miss = self.load_miss + 1
-                    #self.total_cycles = self.total_cycles + (100 * (self.num_bytes/4))
+                    self.total_cycles = self.total_cycles + (100 * (self.num_bytes/4))
 
 
         #if you mod memory
@@ -101,12 +106,8 @@ class Cache:
             item = self.cache_array[index][pos]
             item.set_dirty_bit_true()
             self.total_cycles = self.total_cycles + 1
-        #elif self.write_through_or_back == 1 and self.write_allocate_or_not == 1:
-            #self.total_cycles = self.total_cycles + 1 + 100
-        #elif self.write_through_or_back == 1 and self.write_allocate_or_not == 0:
-            #self.total_cycles = self.total_cycles + 1 + 100
         else:
-            self.total_cycles = self.total_cycles + 1 + 100
+            self.total_cycles = self.total_cycles + 1 + (100 * (self.num_bytes/4))
 
 
     #Increment counter
@@ -154,6 +155,7 @@ class Cache:
             if(self.cache_array[index][i] != None):
                 if(self.cache_array[index][i].get_tag() == tag):
                     self.load_hits += 1
+                    self.total_cycles = self.total_cycles + 1
                     self.cache_array[index][i].reset_lru()
                     return
         #Miss
@@ -162,6 +164,7 @@ class Cache:
             if(self.cache_array[index][i] == None):
                 self.cache_array[index][i] = b1
                 self.load_miss += 1
+                self.total_cycles = self.total_cycles + 1 + (100 * (self.num_bytes/4))
                 return
         x = 0
         if self.eviction == 0:
@@ -179,5 +182,4 @@ class Cache:
     def get_cycles(self):
         total_load = self.load_hits + self.load_miss
         total_store = self.store_hits + self.store_miss
-        #total_cycles = total_load + total_store
         return total_load, total_store, self.load_hits, self.load_miss, self.store_hits, self.store_miss, self.total_cycles

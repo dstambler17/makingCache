@@ -1,3 +1,8 @@
+#Kevin Sherman
+#Daniel Stambler
+#ksherma6@jhu.edu
+#dstambl2@jhu.edu
+
 class Block:
     tag = 0
     dirty_bit = 0

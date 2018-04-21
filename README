@@ -47,7 +47,7 @@ Conclusions
 Overall, we conclude that Optimizing when i and j are in the right order will not have as
 much an effect as when you optimize when i and j were swapped.
 When you swap i and j, you violate the locality rule of the cache and thus, accessing different parts of the cache becomes much smaller, leaving more room for optimization.
-When we experiment with the size parameter, we also find that optimizing helps for the caches with the larger paramters.
+When we experiment with the size parameter, we also find that optimizing helps for the caches with the larger parameters.
 
 -------------------------------------------------------------------------------------------
 HW6 Part 2
@@ -57,9 +57,8 @@ python3 csim.py (followed by command line arguments)
 For example:
 python3 csim.py 256 4 16 1 0 1 gcc.trace
 
-Brief Explination
+Brief Explanation
 We created a Cache object and a Block Object for this program
 Most of our program was handled in the cache object class file.
 Each block object was made up of a bit that could be dirty, a tag, a counter
 for FIFO, and a counter for least recently used.
-

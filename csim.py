@@ -88,7 +88,6 @@ def main():
     offset = int(math.log(num_bytes,2))
 
     simpleCache = Cache(num_sets, num_blocks, num_bytes, write_allocate_or_not, write_through_or_back, eviction)
-    arr = simpleCache.get_cache_array()
     readfile(input_file, index, offset, simpleCache)
 
     total_load, total_store, load_hits, load_miss, store_hits, store_miss, total_cycles = simpleCache.get_cycles()

@@ -31,10 +31,6 @@ class Cache:
         self.eviction = eviction
         self.cache_array = [[None for x in range(num_blocks)] for y in range(num_sets)]
 
-
-    def get_cache_array(self):
-        return self.cache_array
-
     def find_fifo(self, index):
         b2 = self.cache_array[index][1].get_fifo()
         x = 0

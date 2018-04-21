@@ -84,7 +84,6 @@ class FakeCache:
             item.set_dirty_bit_true()
 
 
-
     #Increment if store is a hit
     def store_hit(tag, index):
         self.store_hits = self.store_hits + 1

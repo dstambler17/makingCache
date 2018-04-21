@@ -32,13 +32,14 @@ class Cache:
         self.cache_array = [[None for x in range(num_blocks)] for y in range(num_sets)]
 
     def find_fifo(self, index):
-        b2 = self.cache_array[index][1].get_fifo()
+        b2 = 0
         x = 0
         for i in range(self.num_blocks):
-            if b2 < self.cache_array[index][i].get_fifo():
-                b2 = self.cache_array[index][i].get_fifo()
-                x = i
-        return x 
+            if(self.cache_array[index][i] != None):
+                if b2 < self.cache_array[index][i].get_fifo():
+                    b2 = self.cache_array[index][i].get_fifo()
+                    x = i
+        return x
 
 
     def find_lru(self, index):
@@ -69,7 +70,7 @@ class Cache:
             if full_set == 1: #if full,
                 self.total_cycles = self.total_cycles + (100 * (self.num_bytes/4))
                 if self.eviction == 0:
-                    x = find_fifo(index)
+                    x = self.find_fifo(index)
                     self.cache_array[index][x] = b
                     if self.write_through_or_back == 0:
                         self.store_miss = self.store_miss + 1
@@ -91,7 +92,6 @@ class Cache:
         if self.write_through_or_back == 0:
             item = self.cache_array[index][pos]
             item.set_dirty_bit_true()
-
 
 
 
@@ -152,6 +152,7 @@ class Cache:
                 if(self.cache_array[index][i].get_tag() == tag):
                     self.load_hits += 1
                     self.total_cycles = self.total_cycles + 1
+                    self.cache_array[index][i].set_dirty_bit_false()
                     self.cache_array[index][i].reset_lru()
                     return
         #Miss
@@ -172,6 +173,7 @@ class Cache:
             #self.load_miss += 1
         self.cache_array[index][x] = b1
         self.load_miss += 1
+        self.increment_counters(tag, index)
         return
 
 

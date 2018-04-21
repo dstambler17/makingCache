@@ -14,6 +14,9 @@ class Block:
 
     def set_dirty_bit_true(self):
         self.dirty_bit = 1
+	
+    def set_dirty_bit_false(self):
+	self.dirty_bit = 0
 
     def reset_lru(self):
         self.lru = 0

@@ -22,7 +22,7 @@
 
 #include <stdlib.h>
 
-#define SIZE 2048
+#define SIZE 4096
 
 int matrix[SIZE][SIZE];
 
